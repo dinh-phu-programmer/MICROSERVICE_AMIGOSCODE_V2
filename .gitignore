@@ -3,7 +3,11 @@
 .project
 target
 .factorypath
+.idea
+.idea/**
 
+**/.idea
+**/.idea/**
 **/.settings
 **/.classpath
 **/.project

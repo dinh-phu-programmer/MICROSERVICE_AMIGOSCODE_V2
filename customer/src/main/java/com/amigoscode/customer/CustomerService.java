@@ -1,6 +1,9 @@
 package com.amigoscode.customer;
 
+import com.amigoscode.clients.fraud.FraudCheckResponse;
+import com.amigoscode.clients.fraud.FraudClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -13,6 +16,7 @@ public class CustomerService {
 
 	private final CustomerRepostiry customerRepository;
 	private final RestTemplate restTemplate;
+	private final FraudClient fraudClient;
 	@Transactional
 	public void registerCustomer(CustomerRegistrationRequest request) {
 		Customer customer = Customer.builder().firstName(request.getFirstName()).lastName(request.getLastName())
@@ -24,11 +28,12 @@ public class CustomerService {
 		customerRepository.saveAndFlush(customer);
         // todo: check if fraudster
 
-		FraudCheckResponse fraudCheckResponse= restTemplate.getForObject(
-				"http://fraud/api/v1/fraud-check/{customerId}",
-				FraudCheckResponse.class,
-				customer.getId()
-		);
+//		FraudCheckResponse fraudCheckResponse= restTemplate.getForObject(
+//				"http://fraud/api/v1/fraud-check/{customerId}",
+//				FraudCheckResponse.class,
+//				customer.getId()
+//		);
+		FraudCheckResponse fraudCheckResponse=fraudClient.isFraudster(customer.getId());
 
 		if(fraudCheckResponse.getIsFraudster()){
 			throw new IllegalStateException("fraudster");

@@ -5,6 +5,7 @@ target
 .factorypath
 .idea
 .idea/**
+.idea/
 
 **/.idea
 **/.idea/**

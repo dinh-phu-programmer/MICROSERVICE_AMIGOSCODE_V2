@@ -2,6 +2,8 @@ package com.amigoscode.customer;
 
 import com.amigoscode.clients.fraud.FraudCheckResponse;
 import com.amigoscode.clients.fraud.FraudClient;
+import com.amigoscode.clients.notification.NotificationClient;
+import com.amigoscode.clients.notification.NotificationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class CustomerService {
 	private final CustomerRepostiry customerRepository;
 	private final RestTemplate restTemplate;
 	private final FraudClient fraudClient;
+	private final NotificationClient notificationClient;
 	@Transactional
 	public void registerCustomer(CustomerRegistrationRequest request) {
 		Customer customer = Customer.builder().firstName(request.getFirstName()).lastName(request.getLastName())
@@ -40,6 +43,13 @@ public class CustomerService {
 		}
 
 		// todo: send notification
+		notificationClient.sendNotification(
+				NotificationRequest.builder()
+						.toCustomerId(customer.getId())
+						.toCustomerEmail(customer.getEmail())
+						.message(String.format("Hi %s, welcome to CodingHaki...",customer.getFirstName()))
+						.build()
+		);
 	}
 
 }

@@ -65,5 +65,6 @@
 		<module>eureka-server</module>
 		<module>clients</module>
 		<module>notification</module>
+		<module>apigw</module>
 	</modules>
 </project>

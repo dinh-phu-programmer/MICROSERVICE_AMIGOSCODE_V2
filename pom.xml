@@ -66,5 +66,6 @@
 		<module>clients</module>
 		<module>notification</module>
 		<module>apigw</module>
-	</modules>
+        <module>amqp</module>
+    </modules>
 </project>
